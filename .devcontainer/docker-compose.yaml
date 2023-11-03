@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  workshop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - app-network
+    volumes:
+      - ../:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.ssh:/mnt/ssh
+      - ~/.zsh_history:/root/.zsh_history
+      - ~/.gitconfig:/root/.gitconfig
+    environment:
+      - TZ=America/Los_Angeles
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    entrypoint: [ "zsh", "-c", "while sleep 1000; do :; done" ]
+
+networks:
+  app-network:
+    driver: bridge
